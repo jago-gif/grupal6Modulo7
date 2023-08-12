@@ -77,7 +77,6 @@ const Historial = sequelize.define("Historial", {
     type: DataTypes.DATE,
     allowNull: false,
   },
-  tableName: "Historiales",
 });
 
 Miembro.hasMany(Historial);
