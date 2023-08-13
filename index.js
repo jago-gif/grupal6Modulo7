@@ -1,4 +1,5 @@
 import { Historial, Libro, Miembro, sequelize } from "./modelo.js";
+import { QueryTypes } from "sequelize";
 
 // Sincronizar modelos con la base de datos
 sequelize.sync({ force: true }).then(async () => {
@@ -157,4 +158,22 @@ await Historial.bulkCreate([
 
   // Consultas
   // ...
+
+// Consulta para mostrar libros con menos de 300 páginas
+sequelize.query(
+  "SELECT * FROM Libros WHERE paginas < 300",
+  { type: QueryTypes.SELECT }
+)
+.then(libros => {
+  console.log("Libros con menos de 300 páginas:");
+  libros.forEach(libro => {
+    console.log(`${libro.titulo} - ${libro.paginas} páginas`);
+  });
+})
+.catch(error => {
+  console.error("Error al buscar los libros:", error);
+});
+
+
+
 });
