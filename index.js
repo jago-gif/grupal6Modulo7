@@ -58,17 +58,17 @@ sequelize.sync({ force: true }).then(async () => {
       tipoAutor: 'PRINCIPAL',
       diasPrestamo: 7,
     },
-    {
-      isbn: '111-1111111-111',
-      titulo: 'CUENTOS DE TERROR',
-      paginas: 344,
-      codigoAutor: 4,
-      nombreAutor: 'ANA',
-      apellidoAutor: 'SALGADO',
-      fechaMuerteAutor: null, // Si el autor está vivo, puedes dejarlo como null
-      tipoAutor: 'COAUTOR',
-      diasPrestamo: 7,
-    },
+    // {
+    //   isbn: '111-1111111-111',
+    //   titulo: 'CUENTOS DE TERROR',
+    //   paginas: 344,
+    //   codigoAutor: 4,
+    //   nombreAutor: 'ANA',
+    //   apellidoAutor: 'SALGADO',
+    //   fechaMuerteAutor: null, // Si el autor está vivo, puedes dejarlo como null
+    //   tipoAutor: 'COAUTOR',
+    //   diasPrestamo: 7,
+    // },
     {
       isbn: '222-2222222-222',
       titulo: 'POESÍAS CONTEMPORANEAS',
