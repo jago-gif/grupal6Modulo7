@@ -225,6 +225,37 @@ sequelize.sync({ force: true }).then(async () => {
     .catch((error) => {
       console.error("Error al buscar el libro más solicitado:", error);
     });
+
+    const sevenDaysInMilliseconds = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+
+    sequelize
+      .query(
+        `SELECT m.rut, m.nombre, m.apellido, h.fechaDevolucion, h.fechaPrestamo,
+      DATEDIFF(h.fechaDevolucion, h.fechaPrestamo) AS diasRetraso,
+      DATEDIFF(h.fechaDevolucion, h.fechaPrestamo) * 100 AS multa
+    FROM Historials h
+    INNER JOIN Miembros m ON h.MiembroRut = m.rut
+    WHERE h.fechaDevolucion > h.fechaPrestamo + INTERVAL 7 DAY`,
+        {
+          type: QueryTypes.SELECT,
+        }
+      )
+      .then((lateReturns) => {
+        lateReturns.forEach((lateReturn) => {
+          console.log(
+            `Usuario: ${lateReturn.nombre} ${lateReturn.apellido} (${lateReturn.rut})`
+          );
+          console.log(`Fecha de préstamo: ${lateReturn.fechaPrestamo}`);
+          console.log(`Fecha de devolución: ${lateReturn.fechaDevolucion}`);
+          console.log(`Días de retraso: ${lateReturn.diasRetraso}`);
+          console.log(`Multa a pagar: $${lateReturn.multa}`);
+          console.log("----------------------");
+        });
+      })
+      .catch((error) => {
+        console.error("Error al calcular multas:", error);
+      });
+
 });
 
 
