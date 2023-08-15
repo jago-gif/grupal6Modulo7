@@ -62,6 +62,9 @@ const Autor = sequelize.define("Autor", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  fechaNacimientoAutor: {
+    type: DataTypes.DATEONLY,
+  },
   fechaMuerteAutor: {
     type: DataTypes.DATEONLY,
   },
