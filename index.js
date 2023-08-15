@@ -302,12 +302,12 @@ sequelize.sync({ force: true }).then(async () => {
           );
       
           if (historials.length > 0) {
-            const mostRequestedBook = historials[0];
-            console.log(`El libro más solicitado es: ${mostRequestedBook.titulo}`);
-            console.log(`Total de solicitudes: ${mostRequestedBook.totalSolicitudes}`);
+            const libroMasSolicitado = historials[0];
+            console.log(`El libro más solicitado es: ${libroMasSolicitado.titulo}`);
+            console.log(`Total de solicitudes: ${libroMasSolicitado.totalSolicitudes}`);
           } else {
             console.log("No hay registros de historial de préstamos.");
-          }
+          } 
         } catch (error) {
           console.error("Error al buscar el libro más solicitado:", error);
         }
