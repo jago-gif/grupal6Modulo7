@@ -256,6 +256,101 @@ sequelize.sync({ force: true }).then(async () => {
         console.error("Error al calcular multas:", error);
       });
 
+/////////////////// Versión con await //////////////////////
+
+      async function mostrarLibrosMenosDe300Paginas() {
+        try {
+          const libros = await sequelize.query(
+            "SELECT l.titulo, l.paginas FROM libros l JOIN autors a ON l.isbn = a.isbn WHERE l.paginas < 300;",
+            {
+              type: QueryTypes.SELECT,
+            }
+          );
+      
+          libros.forEach((libro) => {
+            console.log(`${libro.titulo} - ${libro.paginas} páginas`);
+          });
+        } catch (error) {
+          console.error("Error al buscar libros:", error);
+        }
+      }
+      
+      async function mostrarAutoresNacidosDespuesDe1970() {
+        try {
+          const autors = await sequelize.query(
+            "SELECT nombreAutor, apellidoAutor, YEAR(fechaNacimientoAutor) as anos FROM autors WHERE YEAR(fechaNacimientoAutor) > 1970;",
+            {
+              type: QueryTypes.SELECT,
+            }
+          );
+      
+          autors.forEach((autor) => {
+            console.log(`${autor.nombreAutor} - ${autor.apellidoAutor} - ${autor.anos}`);
+          });
+        } catch (error) {
+          console.error("Error al buscar autores:", error);
+        }
+      }
+      
+      async function mostrarLibroMasSolicitado() {
+        try {
+          const historials = await sequelize.query(
+            "SELECT h.LibroIsbn, l.titulo, COUNT(*) AS totalSolicitudes FROM Historials h JOIN Libros l ON h.LibroIsbn = l.isbn GROUP BY h.LibroIsbn, l.titulo ORDER BY totalSolicitudes DESC LIMIT 1;",
+            {
+              type: QueryTypes.SELECT,
+            }
+          );
+      
+          if (historials.length > 0) {
+            const mostRequestedBook = historials[0];
+            console.log(`El libro más solicitado es: ${mostRequestedBook.titulo}`);
+            console.log(`Total de solicitudes: ${mostRequestedBook.totalSolicitudes}`);
+          } else {
+            console.log("No hay registros de historial de préstamos.");
+          }
+        } catch (error) {
+          console.error("Error al buscar el libro más solicitado:", error);
+        }
+      }
+      
+      async function mostrarMultaPorRetraso() {
+        try {
+          const lateReturns = await sequelize.query(
+            `SELECT m.rut, m.nombre, m.apellido, h.fechaDevolucion, h.fechaPrestamo,
+            DATEDIFF(h.fechaDevolucion, h.fechaPrestamo) AS diasRetraso,
+            DATEDIFF(h.fechaDevolucion, h.fechaPrestamo) * 100 AS multa
+            FROM Historials h
+            INNER JOIN Miembros m ON h.MiembroRut = m.rut
+            WHERE h.fechaDevolucion > h.fechaPrestamo + INTERVAL 7 DAY;`,
+            {
+              type: QueryTypes.SELECT,
+            }
+          );
+      
+          lateReturns.forEach((lateReturn) => {
+            console.log(`Usuario: ${lateReturn.nombre} ${lateReturn.apellido} (${lateReturn.rut})`);
+            console.log(`Fecha de préstamo: ${lateReturn.fechaPrestamo}`);
+            console.log(`Fecha de devolución: ${lateReturn.fechaDevolucion}`);
+            console.log(`Días de retraso: ${lateReturn.diasRetraso}`);
+            console.log(`Multa a pagar: $${lateReturn.multa}`);
+            console.log("----------------------");
+          });
+        } catch (error) {
+          console.error("Error al calcular multas:", error);
+        }
+      }
+      
+      // Llamar a las funciones asincrónicas con await
+      (async () => {
+        await mostrarLibrosMenosDe300Paginas();
+        await mostrarAutoresNacidosDespuesDe1970();
+        await mostrarLibroMasSolicitado();
+        await mostrarMultaPorRetraso();
+      })();
+      
+
+
+
 });
 
 
