@@ -327,12 +327,12 @@ sequelize.sync({ force: true }).then(async () => {
             }
           );
       
-          lateReturns.forEach((lateReturn) => {
-            console.log(`Usuario: ${lateReturn.nombre} ${lateReturn.apellido} (${lateReturn.rut})`);
-            console.log(`Fecha de préstamo: ${lateReturn.fechaPrestamo}`);
-            console.log(`Fecha de devolución: ${lateReturn.fechaDevolucion}`);
-            console.log(`Días de retraso: ${lateReturn.diasRetraso}`);
-            console.log(`Multa a pagar: $${lateReturn.multa}`);
+          devolucionesTardias.forEach((devolucionTardia) => {
+            console.log(`Usuario: ${devolucionTardia.nombre} ${devolucionTardia.apellido} (${devolucionTardia.rut})`);
+            console.log(`Fecha de préstamo: ${devolucionTardia.fechaPrestamo}`);
+            console.log(`Fecha de devolución: ${devolucionTardia.fechaDevolucion}`);
+            console.log(`Días de retraso: ${devolucionTardia.diasRetraso}`);
+            console.log(`Multa a pagar: $${devolucionTardia.multa}`);
             console.log("----------------------");
           });
         } catch (error) {
@@ -348,7 +348,7 @@ sequelize.sync({ force: true }).then(async () => {
         await mostrarMultaPorRetraso();
       })();
       
-
+/////////// Fin await /////////
 
 
 });
