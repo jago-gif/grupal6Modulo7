@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize";
 
-const sequelize = new Sequelize("biblioteca", "root", "Palermo60$", {
+const sequelize = new Sequelize("biblioteca", "root", "admin", {
   host: "localhost",
   dialect: "mysql",
 });
@@ -43,9 +43,16 @@ const Libro = sequelize.define("Libro", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  diasPrestamo: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+
+const Autor = sequelize.define("Autor", {
   codigoAutor: {
     type: DataTypes.STRING,
-    allowNull: false,
+    primaryKey: true,
   },
   nombreAutor: {
     type: DataTypes.STRING,
@@ -62,8 +69,8 @@ const Libro = sequelize.define("Libro", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  diasPrestamo: {
-    type: DataTypes.INTEGER,
+  isbn: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
 });
@@ -79,10 +86,13 @@ const Historial = sequelize.define("Historial", {
   },
 });
 
+Libro.belongsToMany(Autor, { through: "LibroAutor" });
+Autor.belongsToMany(Libro, { through: "LibroAutor" });
+
 Miembro.hasMany(Historial);
 Historial.belongsTo(Miembro);
 
 Libro.hasMany(Historial);
 Historial.belongsTo(Libro);
 
-export { Historial, Libro, Miembro, sequelize };
+export { Historial, Libro, Miembro, Autor, sequelize };

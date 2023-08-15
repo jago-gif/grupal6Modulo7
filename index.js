@@ -1,4 +1,4 @@
-import { Historial, Libro, Miembro, sequelize } from "./modelo.js";
+import { Historial, Libro, Miembro, Autor, sequelize } from "./modelo.js";
 import { QueryTypes } from "sequelize";
 
 // Sincronizar modelos con la base de datos
@@ -49,64 +49,71 @@ sequelize.sync({ force: true }).then(async () => {
   // LIBROS
   await Libro.bulkCreate([
     {
-      isbn: '111-1111111-111',
-      titulo: 'CUENTOS DE TERROR',
+      isbn: "111-1111111-111",
+      titulo: "CUENTOS DE TERROR",
       paginas: 344,
-      codigoAutor: 3,
-      nombreAutor: 'JOSE',
-      apellidoAutor: 'SALGADO',
-      fechaMuerteAutor: '2020-01-01',
-      tipoAutor: 'PRINCIPAL',
       diasPrestamo: 7,
+      
     },
-    // {
-    //   isbn: '111-1111111-111',
-    //   titulo: 'CUENTOS DE TERROR',
-    //   paginas: 344,
-    //   codigoAutor: 4,
-    //   nombreAutor: 'ANA',
-    //   apellidoAutor: 'SALGADO',
-    //   fechaMuerteAutor: null, // Si el autor está vivo, puedes dejarlo como null
-    //   tipoAutor: 'COAUTOR',
-    //   diasPrestamo: 7,
-    // },
     {
-      isbn: '222-2222222-222',
-      titulo: 'POESÍAS CONTEMPORANEAS',
+      isbn: "222-2222222-222",
+      titulo: "POESÍAS CONTEMPORANEAS",
       paginas: 167,
-      codigoAutor: 1,
-      nombreAutor: 'ANDRÉS',
-      apellidoAutor: 'ULLOA',
-      fechaMuerteAutor: null,
-      tipoAutor: 'PRINCIPAL',
       diasPrestamo: 7,
     },
     {
-      isbn: '333-3333333-333',
-      titulo: 'HISTORIA DE ASIA',
+      isbn: "333-3333333-333",
+      titulo: "HISTORIA DE ASIA",
       paginas: 511,
-      codigoAutor: 2,
-      nombreAutor: 'SERGIO',
-      apellidoAutor: 'MARDONES',
-      fechaMuerteAutor: '2012-01-01',
-      tipoAutor: 'PRINCIPAL',
       diasPrestamo: 14,
     },
     {
-      isbn: '444-4444444-444',
-      titulo: 'MANUAL DE MECÁNICA',
+      isbn: "444-4444444-444",
+      titulo: "MANUAL DE MECÁNICA",
       paginas: 29,
-      codigoAutor: 5,
-      nombreAutor: 'MARTIN',
-      apellidoAutor: 'PORTA',
-      fechaMuerteAutor: null,
-      tipoAutor: 'PRINCIPAL',
       diasPrestamo: 14,
     },
 
+    // ... Puedes agregar más registros aquí
+  ]);
 
-  // ... Puedes agregar más registros aquí
-]);
+  await Autor.bulkCreate([
+    {
+      codigoAutor: 3,
+      nombreAutor: "JOSE",
+      apellidoAutor: "SALGADO",
+      fechaMuerteAutor: "2020-01-01",
+      tipoAutor: "PRINCIPAL",
+    },
+    {
+      codigoAutor: 4,
+      nombreAutor: "ANA",
+      apellidoAutor: "SALGADO",
+      fechaMuerteAutor:null,
+      tipoAutor: "COAUTOR",
+    },
+    {
+      codigoAutor: 5,
+      nombreAutor: "MARTIN",
+      apellidoAutor: "PORTA",
+      fechaMuerteAutor: null,
+      tipoAutor: "PRINCIPAL",
+    },
+    {
+      codigoAutor: 2,
+      nombreAutor: "SERGIO",
+      apellidoAutor: "MARDONES",
+      fechaMuerteAutor: "2012-01-01",
+      tipoAutor: "PRINCIPAL",
+    },
+    {
+      codigoAutor: 1,
+      nombreAutor: "ANDRÉS",
+      apellidoAutor: "ULLOA",
+      fechaMuerteAutor: null,
+      tipoAutor: "PRINCIPAL",
+    },
+  ]);
 
 //HISTORIAL
 
@@ -160,19 +167,6 @@ await Historial.bulkCreate([
   // ...
 
 // Consulta para mostrar libros con menos de 300 páginas
-sequelize.query(
-  "SELECT * FROM Libros WHERE paginas < 300",
-  { type: QueryTypes.SELECT }
-)
-.then(libros => {
-  console.log("Libros con menos de 300 páginas:");
-  libros.forEach(libro => {
-    console.log(`${libro.titulo} - ${libro.paginas} páginas`);
-  });
-})
-.catch(error => {
-  console.error("Error al buscar los libros:", error);
-});
 
 
 
